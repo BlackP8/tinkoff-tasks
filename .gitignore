@@ -1,5 +1,8 @@
 .idea/
 /hw1.iml
+/bot.iml
+/scrapper.iml
+/link-parser.iml
 /target
 
 # Compiled class file

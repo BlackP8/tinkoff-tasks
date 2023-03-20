@@ -1,9 +1,8 @@
 package parser;
 
 import records.StackOverFlowQuestion;
-
 import java.net.URI;
-import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public final class StackOverFlowParser extends LinkParser {
     public StackOverFlowParser(String domain) {
@@ -12,13 +11,16 @@ public final class StackOverFlowParser extends LinkParser {
 
     @Override
     public Object resolve(URI link) {
+        StackOverFlowQuestion question;
         if (link.getHost().equals(domain)) {
-            String questionId = link.toString().split(Pattern.quote("questions/"))[1].split(Pattern.quote("/"))[0];
-            StackOverFlowQuestion question1 = new StackOverFlowQuestion(questionId);
-            return question1.toString();
+            Matcher matcher = createMatcher("questions/(.*)/", link.getPath());
+            if (matcher.find()) {
+                question = new StackOverFlowQuestion(matcher.group(1));
+                return question.questionId();
+            }
         }
         if (next != null) {
-            next.resolve(link);
+            return next.resolve(link);
         }
         return null;
     }

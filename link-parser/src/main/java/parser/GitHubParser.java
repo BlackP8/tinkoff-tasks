@@ -1,8 +1,8 @@
 package parser;
 
-import records.GitHubUserRepo;
-
+import records.GitHubInfo;
 import java.net.URI;
+import java.util.regex.Matcher;
 
 public final class GitHubParser extends LinkParser {
     public GitHubParser(String domain) {
@@ -11,11 +11,16 @@ public final class GitHubParser extends LinkParser {
 
     @Override
     public Object resolve(URI link) {
+        GitHubInfo userRepo;
         if (link.getHost().equals(domain)) {
-            System.out.println("penis");
+            Matcher matcher = createMatcher("/(.*/.*)/", link.getPath());
+            if (matcher.find()) {
+                userRepo = new GitHubInfo(matcher.group(1));
+                return userRepo.info();
+            }
         }
         if (next != null) {
-            next.resolve(link);
+            return next.resolve(link);
         }
         return null;
     }

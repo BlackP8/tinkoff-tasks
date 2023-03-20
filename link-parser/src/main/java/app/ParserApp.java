@@ -7,14 +7,15 @@ import parser.StackOverFlowParser;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Scanner;
 
 public class ParserApp {
     public static void main(String[] args) throws URISyntaxException {
-        URI gitUri = new URI("https://github.com/sanyarnd/tinkoff-java-course-2022/");
-        URI stackUri = new URI("https://stackoverflow.com/search?q=unsupported%20link");
+        System.out.println("Enter url:\n");
+        URI inputURI = new URI(new Scanner(System.in).nextLine());
         LinkParser githubURLParser = new GitHubParser(DomainName.GITHUB_DOMAIN.getValue());
         LinkParser stackOverFlowParser = new StackOverFlowParser(DomainName.STACKOVERFLOW_DOMAIN.getValue());
         githubURLParser.setNext(stackOverFlowParser);
-        githubURLParser.resolve(stackUri);
+        System.out.println(githubURLParser.resolve(inputURI));
     }
 }
